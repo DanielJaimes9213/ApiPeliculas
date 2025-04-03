@@ -19,7 +19,6 @@
     <Folder Include="Controllers\" />
     <Folder Include="Modelos\Dtos\" />
     <Folder Include="PeliculasMapper\" />
-    <Folder Include="Repositorio\IRepositorio\" />
   </ItemGroup>
 
 </Project>
