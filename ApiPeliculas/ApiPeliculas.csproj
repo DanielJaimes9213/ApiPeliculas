@@ -18,7 +18,6 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Modelos\Dtos\" />
-    <Folder Include="Data\" />
     <Folder Include="PeliculasMapper\" />
     <Folder Include="Repositorio\IRepositorio\" />
   </ItemGroup>
