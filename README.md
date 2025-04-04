@@ -5,7 +5,7 @@ This project is a RESTful API developed with .NET Core 8 following the Code Firs
 ## Technologies Used
 
 - .NET Core 8
-- Entity Framework Core (Code Firstep)
+- Entity Framework Core (Code First)
 - SQL Server
 - Swagger for documentation
 - AutoMapper for model mapping
