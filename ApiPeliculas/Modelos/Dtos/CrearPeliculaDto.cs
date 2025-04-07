@@ -11,9 +11,9 @@
 
         public string RutaImagen { get; set; }
 
-        public enum TipoClasificación { siete, Trece, Dieciseis, Dieciocho }
+        public enum CrearTipoClasificación { siete, Trece, Dieciseis, Dieciocho }
 
-        public TipoClasificación Clasificación { get; set; }
+        public CrearTipoClasificación Clasificación { get; set; }
         public int CategoriaId { get; set; }
     }
 }

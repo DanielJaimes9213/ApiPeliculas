@@ -1,10 +1,11 @@
 ﻿using ApiPeliculas.Data;
 using ApiPeliculas.Modelos;
+using ApiPeliculas.Repositorio.IRepositorio;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiPeliculas.Repositorio
 {
-    public class PeliculaRepositorio
+    public class PeliculaRepositorio : IPeliculaRepositorio
     {
         private readonly ApplicationDbContext _db;
         public PeliculaRepositorio(ApplicationDbContext db)
@@ -13,10 +14,21 @@ namespace ApiPeliculas.Repositorio
         }
         public bool ActualizarPelicula(Pelicula pelicula)
         {
-            pelicula.FechaCreación = DateTime.Now;      
-            _db.Pelicula.Update(pelicula);
+            pelicula.FechaCreación = DateTime.Now;
+            //Arreglar el problema del put
+            var peliculaExistente = _db.Pelicula.Find(pelicula.Id);
+            if (peliculaExistente != null)
+            {
+                _db.Entry(peliculaExistente).CurrentValues.SetValues(pelicula);
+            }
+
+            else
+            {
+                _db.Pelicula.Update(pelicula);
+            }
+
             return Guardar();
-        }
+         }
 
         public bool EliminarPelicula(Pelicula pelicula)
         {
