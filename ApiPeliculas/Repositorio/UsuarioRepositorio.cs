@@ -17,7 +17,7 @@ namespace ApiPeliculas.Repositorio
         public UsuarioRepositorio(ApplicationDbContext db, IConfiguration config )
         {
             _db = db;
-            claveSecreta = config.GetValue<string>("ApiSettings:Secret");
+            claveSecreta = config.GetValue<string>("ApiSettings:Secreta");
         }
         public Usuario GetUsuario(int usuarioId)
         {
@@ -31,8 +31,8 @@ namespace ApiPeliculas.Repositorio
 
         public bool IsUniqueUser(string nombreUsuario)
         {
-            var usuario = _db.Usuario.FirstOrDefault(u => u.NombreUsuario.ToLower().Trim() == nombreUsuario.ToLower().Trim());
-            if (usuario != null)
+            var usuario = _db.Usuario.FirstOrDefault(u => u.NombreUsuario == nombreUsuario);
+            if (usuario == null)
             {
                 return true;
             }
