@@ -3,6 +3,7 @@ using ApiPeliculas.Modelos.Dtos;
 using ApiPeliculas.Repositorio;
 using ApiPeliculas.Repositorio.IRepositorio;
 using AutoMapper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace ApiPeliculas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[EnableCors("PolitcaCors")]
     public class CategoriasController : ControllerBase
     {
         private readonly ICategoriaRepositorio _categoriaRepositorio;
@@ -24,6 +26,7 @@ namespace ApiPeliculas.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        //[EnableCors("PolitcaCors")] //Aplica la política CORS a este método
         public IActionResult GetCategorias()
         {
             var listaCategorias = _categoriaRepositorio.GetCategorias();
