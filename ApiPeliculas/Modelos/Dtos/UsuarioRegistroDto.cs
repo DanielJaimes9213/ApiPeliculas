@@ -12,5 +12,7 @@ namespace ApiPeliculas.Modelos.Dtos
 
         [Required(ErrorMessage = "El password es obligatorio")]
         public string Password { get; set; }
+
+        public string Role { get; set; }
     }
 }
