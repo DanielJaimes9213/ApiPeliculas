@@ -3,6 +3,7 @@ using ApiPeliculas.PeliculasMappers;
 using ApiPeliculas.Repositorio;
 using ApiPeliculas.Repositorio.IRepositorio;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -13,6 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext >(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexionSql")));
+
+//Soporte para cache
+builder.Services.AddResponseCaching();
 
 // Add Repositories
 builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
@@ -41,7 +45,11 @@ builder.Services.AddAuthentication(
         };  
     });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(opcion =>
+{
+    //Cache profile. Un cache global y así no tener que ponerlo en todas partes
+    opcion.CacheProfiles.Add("PorDefecto30Segundos", new CacheProfile() { Duration = 30 });
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

@@ -26,6 +26,7 @@ namespace ApiPeliculas.Controllers
 
         [Authorize(Roles = "Administrador")]
         [HttpGet]
+        [ResponseCache(CacheProfileName = "PorDefecto30Segundos")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetUsuarios()
@@ -37,6 +38,7 @@ namespace ApiPeliculas.Controllers
 
         [Authorize(Roles = "Administrador")]
         [HttpGet("{usuarioId:int}", Name = "GetUsuario")]
+        [ResponseCache(CacheProfileName = "PorDefecto30Segundos")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

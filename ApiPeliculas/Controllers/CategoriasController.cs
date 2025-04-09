@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ApiPeliculas.Controllers
 {
     //[Authorize(Roles ="Admin")]
+    //[ResponseCache(Duration =20)]
     [Route("api/[controller]")]
     [ApiController]
     //[EnableCors("PolitcaCors")]
@@ -27,6 +28,8 @@ namespace ApiPeliculas.Controllers
 
         [AllowAnonymous]
         [HttpGet]
+        //[ResponseCache(Duration = 20)]
+        [ResponseCache(CacheProfileName = "PorDefecto30Segundos")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         //[EnableCors("PolitcaCors")] //Aplica la política CORS a este método
@@ -39,6 +42,9 @@ namespace ApiPeliculas.Controllers
 
         [AllowAnonymous]
         [HttpGet("{categoriaId:int}", Name="GetCategoria" )]
+        //[ResponseCache(Duration = 20)]
+        //[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+        [ResponseCache(CacheProfileName = "PorDefecto30Segundos")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
