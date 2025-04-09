@@ -2,7 +2,10 @@ using ApiPeliculas.Data;
 using ApiPeliculas.PeliculasMappers;
 using ApiPeliculas.Repositorio;
 using ApiPeliculas.Repositorio.IRepositorio;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,26 @@ builder.Services.AddScoped<IPeliculaRepositorio, PeliculaRepositorio>();
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(PeliculasMapper));
+
+//Aquí se configura la autenticación
+builder.Services.AddAuthentication(
+        x => 
+        {
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        } 
+    ).AddJwtBearer(x =>
+    {
+        x.RequireHttpsMetadata = false;
+        x.SaveToken = true;
+        x.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["ApiSettings:Secreta"])),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };  
+    });
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -45,6 +68,8 @@ app.UseHttpsRedirection();
 //Soporte para CORS
 app.UseCors("PoliticaCors");
 
+//Soporte para Autenticación
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
