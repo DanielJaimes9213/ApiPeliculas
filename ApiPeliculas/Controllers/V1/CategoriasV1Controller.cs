@@ -9,22 +9,21 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ApiPeliculas.Controllers
+namespace ApiPeliculas.Controllers.V1
 {
     //[Authorize(Roles ="Admin")]
     //[ResponseCache(Duration =20)]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v{version:apiVersion}/Categorias")]
     [ApiController]
     [ApiVersion("1.0")]
-    [ApiVersion("2.0")]
 
     //[EnableCors("PolitcaCors")]
-    public class CategoriasController : ControllerBase
+    public class CategoriasV1Controller : ControllerBase
     {
         private readonly ICategoriaRepositorio _categoriaRepositorio;
         private readonly IMapper _mapper;
 
-        public CategoriasController(ICategoriaRepositorio categoriaRepositorio, IMapper mapper)
+        public CategoriasV1Controller(ICategoriaRepositorio categoriaRepositorio, IMapper mapper)
         {
             _categoriaRepositorio = categoriaRepositorio;
             _mapper = mapper;
@@ -32,7 +31,6 @@ namespace ApiPeliculas.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        [MapToApiVersion("1.0")] //Especifica la version de la API
         //[ResponseCache(Duration = 20)]
         [ResponseCache(CacheProfileName = "PorDefecto30Segundos")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -45,15 +43,8 @@ namespace ApiPeliculas.Controllers
             return Ok(listaCategoriasDTO);
         }
 
-        [HttpGet]
-        [MapToApiVersion("2.0")] //Especifica la version de la API
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "valor1", "valor2" };
-        }
-
         [AllowAnonymous]
-        [HttpGet("{categoriaId:int}", Name="GetCategoria" )]
+        [HttpGet("{categoriaId:int}", Name = "GetCategoria")]
         //[ResponseCache(Duration = 20)]
         //[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         [ResponseCache(CacheProfileName = "PorDefecto30Segundos")]
@@ -79,17 +70,17 @@ namespace ApiPeliculas.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult CrearCategoria([FromBody] CrearCategoriaDto crearCategoriaDto)
         {
-           if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-           if( crearCategoriaDto == null)
-           {
+            if (crearCategoriaDto == null)
+            {
                 return BadRequest(ModelState);
             }
 
-           if (_categoriaRepositorio.ExisteCategoria(crearCategoriaDto.Nombre))
+            if (_categoriaRepositorio.ExisteCategoria(crearCategoriaDto.Nombre))
             {
                 ModelState.AddModelError("Nombre", "La categoria ya existe");
                 return StatusCode(400, ModelState);

@@ -8,16 +8,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ApiPeliculas.Controllers
+namespace ApiPeliculas.Controllers.V1
 {
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v{version:apiVersion}/Peliculas")]
     [ApiController]
     [ApiVersion("1.0")]
-    public class PeliculasController : ControllerBase
+    public class PeliculasV1Controller : ControllerBase
     {
         private readonly IPeliculaRepositorio _peliculaRepositorio;
         private readonly IMapper _mapper;
-        public PeliculasController(IPeliculaRepositorio peliculaRepositorio, IMapper mapper)
+        public PeliculasV1Controller(IPeliculaRepositorio peliculaRepositorio, IMapper mapper)
         {
             _peliculaRepositorio = peliculaRepositorio;
             _mapper = mapper;
@@ -156,8 +156,8 @@ namespace ApiPeliculas.Controllers
         public IActionResult GetPeliculasEnCategoria(int categoriaId)
         {
             var listaPeliculas = _peliculaRepositorio.GetPeliculasEnCategoria(categoriaId);
-            
-            if(listaPeliculas == null)
+
+            if (listaPeliculas == null)
             {
                 return NotFound();
             }
@@ -176,7 +176,7 @@ namespace ApiPeliculas.Controllers
         {
             try
             {
-                var resultado = _peliculaRepositorio.BuscarPelicula(nombre);      
+                var resultado = _peliculaRepositorio.BuscarPelicula(nombre);
 
                 if (resultado.Any())
                 {
@@ -191,7 +191,7 @@ namespace ApiPeliculas.Controllers
             {
 
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error recuperando datos");
-            }         
+            }
         }
     }
 }

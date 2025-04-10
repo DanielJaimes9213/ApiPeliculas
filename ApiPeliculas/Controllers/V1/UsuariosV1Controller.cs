@@ -9,21 +9,21 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace ApiPeliculas.Controllers
+namespace ApiPeliculas.Controllers.V1
 {
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v{version:apiVersion}/Usuarios")]
     [ApiController]
     [ApiVersion("1.0")]
-    public class UsuariosController : ControllerBase
+    public class UsuariosV1Controller : ControllerBase
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;
         protected RespuestaAPI _respuestaAPI;
         private readonly IMapper _mapper;
-        public UsuariosController(IUsuarioRepositorio usuarioRepositorio, IMapper mapper)
+        public UsuariosV1Controller(IUsuarioRepositorio usuarioRepositorio, IMapper mapper)
         {
             _usuarioRepositorio = usuarioRepositorio;
             _mapper = mapper;
-            this._respuestaAPI = new();
+            _respuestaAPI = new();
         }
 
         [Authorize(Roles = "Administrador")]
@@ -92,17 +92,17 @@ namespace ApiPeliculas.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Login([FromBody] UsuarioLoginDto usuarioLoginDto)
         {
-          
+
             var respuestaLogin = await _usuarioRepositorio.Login(usuarioLoginDto);
 
-            if(respuestaLogin == null || string.IsNullOrEmpty(respuestaLogin.Token))
+            if (respuestaLogin == null || string.IsNullOrEmpty(respuestaLogin.Token))
             {
                 _respuestaAPI.StatusCode = HttpStatusCode.BadRequest;
                 _respuestaAPI.IsSuccess = false;
                 _respuestaAPI.ErrorMessages.Add("El nombre de usuario o password son incorrectos");
                 return BadRequest(_respuestaAPI);
-            }        
-                  
+            }
+
             _respuestaAPI.StatusCode = HttpStatusCode.OK;
             _respuestaAPI.IsSuccess = true;
             _respuestaAPI.Result = respuestaLogin;
