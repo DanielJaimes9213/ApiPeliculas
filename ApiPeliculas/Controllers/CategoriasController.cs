@@ -2,6 +2,7 @@
 using ApiPeliculas.Modelos.Dtos;
 using ApiPeliculas.Repositorio;
 using ApiPeliculas.Repositorio.IRepositorio;
+using Asp.Versioning;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -12,8 +13,11 @@ namespace ApiPeliculas.Controllers
 {
     //[Authorize(Roles ="Admin")]
     //[ResponseCache(Duration =20)]
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
+
     //[EnableCors("PolitcaCors")]
     public class CategoriasController : ControllerBase
     {
@@ -28,6 +32,7 @@ namespace ApiPeliculas.Controllers
 
         [AllowAnonymous]
         [HttpGet]
+        [MapToApiVersion("1.0")] //Especifica la version de la API
         //[ResponseCache(Duration = 20)]
         [ResponseCache(CacheProfileName = "PorDefecto30Segundos")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -38,6 +43,13 @@ namespace ApiPeliculas.Controllers
             var listaCategorias = _categoriaRepositorio.GetCategorias();
             var listaCategoriasDTO = _mapper.Map<List<CategoriaDto>>(listaCategorias);
             return Ok(listaCategoriasDTO);
+        }
+
+        [HttpGet]
+        [MapToApiVersion("2.0")] //Especifica la version de la API
+        public IEnumerable<string> Get()
+        {
+            return new string[] { "valor1", "valor2" };
         }
 
         [AllowAnonymous]

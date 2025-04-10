@@ -2,6 +2,7 @@ using ApiPeliculas.Data;
 using ApiPeliculas.PeliculasMappers;
 using ApiPeliculas.Repositorio;
 using ApiPeliculas.Repositorio.IRepositorio;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,29 @@ builder.Services.AddResponseCaching();
 builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
 builder.Services.AddScoped<IPeliculaRepositorio, PeliculaRepositorio>();
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+
+//Soporte para versionamiento
+var apiVersioningBuilder = builder.Services.AddApiVersioning(options =>
+{
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.ReportApiVersions = true;
+    //options.ApiVersionReader = ApiVersionReader.Combine(
+    //    new QueryStringApiVersionReader("api-version") //?api-version=1.0
+    //                                                   //new HeaderApiVersionReader("X-Version"),
+    //                                                   //new MediaTypeApiVersionReader("ver") // Soporte para versionamiento en el header
+    //);
+});
+
+apiVersioningBuilder.AddApiExplorer(
+        opciones =>
+        {
+            opciones.GroupNameFormat = "'v'VVV";
+            opciones.SubstituteApiVersionInUrl = true;
+        }    
+    );
+
+
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(PeliculasMapper));
 
@@ -81,7 +105,42 @@ builder.Services.AddSwaggerGen(options =>
             new List<string>()
         }
     });
-
+    options.SwaggerDoc("v1", new OpenApiInfo 
+        { 
+            Version = "v1.0",
+            Title = "Peliculas Api V1",
+            Description = "Api para gestionar peliculas",
+            TermsOfService = new Uri("https://www.google.com"),
+            Contact = new OpenApiContact 
+            { 
+                Name = "Daniel Jaimes",
+                Url = new Uri("https://www.google.com"),
+            },
+            License = new OpenApiLicense
+            {
+                Name = "Licencia de prueba",
+                Url = new Uri("https://www.google.com"),
+            }
+        }
+    );
+    options.SwaggerDoc("v2", new OpenApiInfo
+    {
+        Version = "v2.0",
+        Title = "Peliculas Api V2",
+        Description = "Api para gestionar peliculas",
+        TermsOfService = new Uri("https://www.google.com"),
+        Contact = new OpenApiContact
+        {
+            Name = "Daniel Jaimes",
+            Url = new Uri("https://www.google.com"),
+        },
+        License = new OpenApiLicense
+        {
+            Name = "Licencia de prueba",
+            Url = new Uri("https://www.google.com"),
+        }
+    }
+    );
 });
 
 //Soporte para CORS
@@ -99,7 +158,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(opciones =>
+    {
+        opciones.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiPeliculasV1");
+        opciones.SwaggerEndpoint("/swagger/v2/swagger.json", "ApiPeliculasV2");
+    });
 }
 
 app.UseHttpsRedirection();
