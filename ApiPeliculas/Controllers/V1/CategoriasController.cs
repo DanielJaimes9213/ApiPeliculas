@@ -16,14 +16,16 @@ namespace ApiPeliculas.Controllers.V1
     [Route("api/v{version:apiVersion}/Categorias")]
     [ApiController]
     [ApiVersion("1.0")]
+    //[ApiVersion("1.0", Deprecated = true)]
+    //[Obsolete("Esta version de la API esta obsoleta, favor de usar la version 2.0")]
 
     //[EnableCors("PolitcaCors")]
-    public class CategoriasV1Controller : ControllerBase
+    public class CategoriasController : ControllerBase
     {
         private readonly ICategoriaRepositorio _categoriaRepositorio;
         private readonly IMapper _mapper;
 
-        public CategoriasV1Controller(ICategoriaRepositorio categoriaRepositorio, IMapper mapper)
+        public CategoriasController(ICategoriaRepositorio categoriaRepositorio, IMapper mapper)
         {
             _categoriaRepositorio = categoriaRepositorio;
             _mapper = mapper;
@@ -41,6 +43,13 @@ namespace ApiPeliculas.Controllers.V1
             var listaCategorias = _categoriaRepositorio.GetCategorias();
             var listaCategoriasDTO = _mapper.Map<List<CategoriaDto>>(listaCategorias);
             return Ok(listaCategoriasDTO);
+        }
+
+        [HttpGet("GetString")]
+        [Obsolete("Esta endpoint está obsoleto, use el endpoint de version 2.0")]
+        public IEnumerable<string> Get()
+        {
+            return new string[] { "valor1", "valor2" };
         }
 
         [AllowAnonymous]

@@ -1,25 +1,24 @@
 ﻿using ApiPeliculas.Modelos;
 using ApiPeliculas.Modelos.Dtos;
-using ApiPeliculas.Repositorio;
 using ApiPeliculas.Repositorio.IRepositorio;
 using Asp.Versioning;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace ApiPeliculas.Controllers.V1
+namespace ApiPeliculas.Controllers
 {
     [Route("api/v{version:apiVersion}/Usuarios")]
     [ApiController]
-    [ApiVersion("1.0")]
-    public class UsuariosV1Controller : ControllerBase
+    //[ApiVersion("1.0")]
+    [ApiVersionNeutral]
+    public class UsuariosController : ControllerBase
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;
         protected RespuestaAPI _respuestaAPI;
         private readonly IMapper _mapper;
-        public UsuariosV1Controller(IUsuarioRepositorio usuarioRepositorio, IMapper mapper)
+        public UsuariosController(IUsuarioRepositorio usuarioRepositorio, IMapper mapper)
         {
             _usuarioRepositorio = usuarioRepositorio;
             _mapper = mapper;
