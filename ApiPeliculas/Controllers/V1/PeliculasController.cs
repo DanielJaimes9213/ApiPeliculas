@@ -23,15 +23,50 @@ namespace ApiPeliculas.Controllers.V1
             _mapper = mapper;
         }
 
+        //[AllowAnonymous]
+        //[HttpGet]
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //public IActionResult GetPeliculas()
+        //{
+        //    var listaPeliculas = _peliculaRepositorio.GetPeliculas();
+        //    var listaPeliculasDto = _mapper.Map<List<PeliculaDto>>(listaPeliculas);
+        //    return Ok(listaPeliculasDto);
+        //}
+
         [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetPeliculas()
+        public IActionResult GetPeliculas([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var listaPeliculas = _peliculaRepositorio.GetPeliculas();
-            var listaPeliculasDto = _mapper.Map<List<PeliculaDto>>(listaPeliculas);
-            return Ok(listaPeliculasDto);
+            try
+            {
+                var totalPeliculas = _peliculaRepositorio.GetTotalPeliculas();
+                var peliculas = _peliculaRepositorio.GetPeliculas(pageNumber, pageSize);
+
+                if(peliculas == null || !peliculas.Any())
+                {
+                    return NotFound($"No se encontraron películas");
+                }
+
+                var PelicuasDto = _mapper.Map<List<PeliculaDto>>(peliculas);
+
+                var response = new
+                {
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalPages = (int)Math.Ceiling(totalPeliculas / (double)pageSize),
+                    TotalItems = totalPeliculas,
+                    Items = PelicuasDto
+                };
+
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+               return StatusCode(StatusCodes.Status500InternalServerError, "Error recuperando datos");
+            }
         }
 
         [AllowAnonymous]
