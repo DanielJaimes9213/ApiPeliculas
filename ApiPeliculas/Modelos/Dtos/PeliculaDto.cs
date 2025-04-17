@@ -13,8 +13,9 @@ namespace ApiPeliculas.Modelos.Dtos
 
         public int Duracion { get; set; }
 
-        public string RutaImagen { get; set; }
+        public string? RutaImagen { get; set; }
 
+        public string? RutaLocalImagen { get; set; }
         public enum TipoClasificación { siete, Trece, Dieciseis, Dieciocho }
 
         public TipoClasificación Clasificación { get; set; }

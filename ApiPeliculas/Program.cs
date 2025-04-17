@@ -169,6 +169,8 @@ if (app.Environment.IsDevelopment())
         opciones.SwaggerEndpoint("/swagger/v2/swagger.json", "ApiPeliculasV2");
     });
 }
+//Soporte para archivos estáticos como imágenes
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 

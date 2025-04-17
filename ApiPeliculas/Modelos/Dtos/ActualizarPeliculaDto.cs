@@ -1,11 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ApiPeliculas.Modelos
+﻿namespace ApiPeliculas.Modelos.Dtos
 {
-    public class Pelicula
+    public class ActualizarPeliculaDto
     {
-        [Key]
         public int Id { get; set; }
 
         public string Nombre { get; set; }
@@ -18,17 +14,12 @@ namespace ApiPeliculas.Modelos
 
         public string? RutaLocalImagen { get; set; }
 
+        public IFormFile Imagen { get; set; }
         public enum TipoClasificación { siete, Trece, Dieciseis, Dieciocho }
 
-        public TipoClasificación Clasificación {  get; set; }
+        public TipoClasificación Clasificación { get; set; }
 
         public DateTime FechaCreación { get; set; }
-
-        //Relacion con Categoria
-
         public int CategoriaId { get; set; }
-        [ForeignKey("CategoriaId")]
-        public Categoria Categoria { get; set; }
-
     }
 }
