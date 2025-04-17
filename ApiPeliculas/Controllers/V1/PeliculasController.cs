@@ -217,15 +217,22 @@ namespace ApiPeliculas.Controllers.V1
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetPeliculasEnCategoria(int categoriaId)
         {
-            var listaPeliculas = _peliculaRepositorio.GetPeliculasEnCategoria(categoriaId);
-
-            if (listaPeliculas == null)
+            try
             {
-                return NotFound();
-            }
+                var listaPeliculas = _peliculaRepositorio.GetPeliculasEnCategoria(categoriaId);
 
-            var listasPeliculasDto = _mapper.Map<List<PeliculaDto>>(listaPeliculas);
-            return Ok(listasPeliculasDto);
+                if (listaPeliculas == null || !listaPeliculas.Any())
+                {
+                    return NotFound($"No se encontaron películas en la categoria con ID {categoriaId}");
+                }
+
+                var listasPeliculasDto = _mapper.Map<List<PeliculaDto>>(listaPeliculas);
+                return Ok(listasPeliculasDto);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error recuperando datos");
+            }
         }
 
         [AllowAnonymous]
