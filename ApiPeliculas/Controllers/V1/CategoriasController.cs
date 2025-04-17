@@ -71,7 +71,7 @@ namespace ApiPeliculas.Controllers.V1
             return Ok(categoriaDTO);
         }
 
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -106,7 +106,7 @@ namespace ApiPeliculas.Controllers.V1
             return CreatedAtRoute("GetCategoria", new { categoriaId = categoria.Id }, categoria);
         }
 
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Admin")]
         [HttpPatch("{categoriaId:int}", Name = "ActualizarPatchCategoria")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -142,7 +142,7 @@ namespace ApiPeliculas.Controllers.V1
             return NoContent();
         }
 
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{categoriaId:int}", Name = "ActualizarPutCategoria")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -179,7 +179,7 @@ namespace ApiPeliculas.Controllers.V1
             return NoContent();
         }
 
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{categoriaId:int}", Name = "EliminarCategoria")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

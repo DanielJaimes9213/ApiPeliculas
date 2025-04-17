@@ -1,4 +1,5 @@
 using ApiPeliculas.Data;
+using ApiPeliculas.Modelos;
 using ApiPeliculas.PeliculasMappers;
 using ApiPeliculas.Repositorio;
 using ApiPeliculas.Repositorio.IRepositorio;
@@ -18,7 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext >(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexionSql")));
 
 //Soporte para autenticación con .NET Identity
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<AppUsuario, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 //Soporte para cache
 builder.Services.AddResponseCaching();
