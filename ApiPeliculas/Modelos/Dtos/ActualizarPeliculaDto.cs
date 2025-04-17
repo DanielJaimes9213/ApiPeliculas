@@ -19,7 +19,6 @@
 
         public TipoClasificación Clasificación { get; set; }
 
-        public DateTime FechaCreación { get; set; }
         public int CategoriaId { get; set; }
     }
 }
